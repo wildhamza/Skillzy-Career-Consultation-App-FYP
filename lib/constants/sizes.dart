@@ -1,0 +1,1 @@
+const pagePadding = 30.0;

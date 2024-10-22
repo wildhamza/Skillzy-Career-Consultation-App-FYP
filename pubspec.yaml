@@ -10,6 +10,9 @@ dependencies:
   cupertino_icons: ^1.0.8
   google_fonts: ^6.2.1
   flutter_native_splash: ^2.4.2
+  liquid_swipe: ^3.1.0
+  smooth_page_indicator: ^1.2.0+3
+  get: ^4.6.6
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -17,12 +20,14 @@ dev_dependencies:
 flutter_native_splash:
   color: "#f7f6f1"
   color_dark: "#272727"
-  image: assets/img/logo_600.png
-  image_dark: assets/img/logo_600.png
+  image: assets/img/logo.png
+  image_dark: assets/img/logo.png
   android_12:
     icon_background_color: "#f7f6f1"
     icon_background_color_dark: "#272727"
-    image: assets/img/logo_600.png
-    image_dark: assets/img/logo_600.png
+    image: assets/img/logo.png
+    image_dark: assets/img/logo.png
 flutter:
   uses-material-design: true
+  assets:
+    - assets/img/

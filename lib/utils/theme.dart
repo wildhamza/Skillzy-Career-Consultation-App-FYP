@@ -18,6 +18,22 @@ class AppTheme {
     },
   );
 
+  static const MaterialColor secondaryColor = MaterialColor(
+    0xFFFF6F61,
+    <int, Color>{
+      50: Color(0xFFFFE6E3),   // Lightest shade
+      100: Color(0xFFFFC0B9),
+      200: Color(0xFFFF978C),
+      300: Color(0xFFFF6D5F),
+      400: Color(0xFFFF4F3F),
+      500: Color(0xFFFF6F61),   // Base color
+      600: Color(0xFFDB6055),
+      700: Color(0xFFB74F47),
+      800: Color(0xFF933F3A),
+      900: Color(0xFF7A3230),   // Darkest shade
+    },
+  );
+
 
   static ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
