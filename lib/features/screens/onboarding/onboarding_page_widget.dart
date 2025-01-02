@@ -12,9 +12,11 @@ class OnBoardingPageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       padding: const EdgeInsets.all(pagePadding),
-      color: model.background,
+      color: isDarkMode ? model.background_dark : model.background,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -23,7 +25,7 @@ class OnBoardingPageWidget extends StatelessWidget {
             children: [
               Text(model.title, style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.center,),
               const SizedBox(height: 10.0),
-              Text(model.subtitle, textAlign: TextAlign.center,),
+              Text(model.subtitle, textAlign: TextAlign.center),
             ],
           ),
           Text(model.counter),

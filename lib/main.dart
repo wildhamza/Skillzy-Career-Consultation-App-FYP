@@ -1,4 +1,5 @@
 import 'package:basics/features/screens/onboarding/onboarding_screen.dart';
+import 'package:basics/router.dart';
 import 'package:basics/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,10 +14,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      theme: AppTheme.lightTheme,
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.darkTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
-      home: const OnBoardingScreen(),
+      initialRoute: '/', // Initial route
+      getPages: AppRouter.getPages, // Use routes from router.dart
     );
   }
 }

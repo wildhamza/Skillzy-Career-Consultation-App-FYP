@@ -6,6 +6,7 @@ class OnBoardingModel {
   final String subtitle;
   final String counter;
   final Color background;
+  final Color background_dark;
   final double height;
 
   OnBoardingModel({
@@ -14,6 +15,7 @@ class OnBoardingModel {
     required this.subtitle,
     required this.counter,
     required this.background,
+    required this.background_dark,
     required this.height,
   });
 }

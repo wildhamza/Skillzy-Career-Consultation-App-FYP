@@ -34,6 +34,63 @@ class AppTheme {
     },
   );
 
+  static const MaterialColor blackPalette = MaterialColor(
+    0xFF000000,
+    <int, Color>{
+      50: Color(0xFF999999), // Light gray
+      100: Color(0xFF888888),
+      200: Color(0xFF777777),
+      300: Color(0xFF666666),
+      400: Color(0xFF555555),
+      500: Color(0xFF444444), // Black
+      600: Color(0xFF333333),
+      700: Color(0xFF222222),
+      800: Color(0xFF111111),
+      900: Color(0xFF000000),
+    },
+  );
+
+  static const MaterialColor whitePalette = MaterialColor(
+    0xFFFFFFFF,
+    <int, Color>{
+      50: Color(0xFFFFFFFF), // White
+      100: Color(0xFFFAFAFA),
+      200: Color(0xFFF5F5F5),
+      300: Color(0xFFEEEEEE),
+      400: Color(0xFFE8E8E8),
+      500: Color(0xFFE0E0E0),
+      600: Color(0xFFD6D6D6),
+      700: Color(0xFFCCCCCC),
+      800: Color(0xFFBFBFBF),
+      900: Color(0xFFB3B3B3), // Light gray
+    },
+  );
+
+  // Define the text theme for light mode
+  static TextTheme textTheme(bool isDark) {
+    // Get the default Poppins TextTheme
+    TextTheme baseTextTheme = GoogleFonts.poppinsTextTheme();
+    Color color = isDark ? Colors.white : Colors.black;
+
+    return TextTheme(
+      // Override colors for each text style
+      displayLarge: baseTextTheme.displayLarge?.copyWith(color: color),
+      displayMedium: baseTextTheme.displayMedium?.copyWith(color: color),
+      displaySmall: baseTextTheme.displaySmall?.copyWith(color: color),
+      headlineLarge: baseTextTheme.headlineLarge?.copyWith(color: color),
+      headlineMedium: baseTextTheme.headlineMedium?.copyWith(color: color),
+      headlineSmall: baseTextTheme.headlineSmall?.copyWith(color: color),
+      titleLarge: baseTextTheme.titleLarge?.copyWith(color: color),
+      titleMedium: baseTextTheme.titleMedium?.copyWith(color: color),
+      titleSmall: baseTextTheme.titleSmall?.copyWith(color: color),
+      bodyLarge: baseTextTheme.bodyLarge?.copyWith(color: color),
+      bodyMedium: baseTextTheme.bodyMedium?.copyWith(color: color),
+      bodySmall: baseTextTheme.bodySmall?.copyWith(color: color),
+      labelLarge: baseTextTheme.labelLarge?.copyWith(color: color),
+      labelMedium: baseTextTheme.labelMedium?.copyWith(color: color),
+      labelSmall: baseTextTheme.labelSmall?.copyWith(color: color),
+    );
+  }
 
   static ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
@@ -42,16 +99,17 @@ class AppTheme {
       backgroundColor: primaryColor[900],
       foregroundColor: Colors.white,
     ),
-    textTheme: GoogleFonts.robotoTextTheme(),
+    textTheme: textTheme(false),
   );
 
   static ThemeData darkTheme = ThemeData(
+    fontFamily: "Poppins",
     brightness: Brightness.dark,
     primaryColor: primaryColor,
     appBarTheme: AppBarTheme(
       backgroundColor: primaryColor[900],
       foregroundColor: Colors.white,
     ),
-    textTheme: GoogleFonts.robotoTextTheme(),
+    textTheme: textTheme(true),
   );
 }
