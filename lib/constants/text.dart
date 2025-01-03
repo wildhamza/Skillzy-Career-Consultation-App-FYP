@@ -3,7 +3,7 @@ const onboardingScreenOneTitle = "Discover Your Ideal Career";
 const onboardingScreenOneText = "Get personalized job suggestions based on your strengths and preferences.";
 const onboardingScreenOneCounter = "1/3";
 
-const onboardingScreenTwoTitle = "Answer a Few Quick Questions";
+const onboardingScreenTwoTitle = "Answer a Few Questions";
 const onboardingScreenTwoText = "Help us understand your skills and interests for better recommendations.";
 const onboardingScreenTwoCounter = "2/3";
 

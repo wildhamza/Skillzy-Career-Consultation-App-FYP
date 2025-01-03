@@ -76,7 +76,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             enableLoop: false,
           ),
           Positioned(
-            bottom: 110,
+            bottom: 70,
             child: OutlinedButton(
               onPressed: () {
                 if (_currentPage < 2) {
@@ -108,9 +108,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               onPressed: () {
                 _controller.jumpToPage(page: 2); // Skip to the last slide
               },
-              child: const Text(
+              child: Text(
                 "Skip",
-                style: TextStyle(color: Colors.grey),
+                style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.grey),
               ),
             ),
           ),

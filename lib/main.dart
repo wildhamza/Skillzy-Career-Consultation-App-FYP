@@ -1,4 +1,3 @@
-import 'package:basics/features/screens/onboarding/onboarding_screen.dart';
 import 'package:basics/router.dart';
 import 'package:basics/utils/theme.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.darkTheme,
+      theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
       initialRoute: '/', // Initial route

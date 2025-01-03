@@ -8,10 +8,11 @@ class OtpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final defaultPinTheme = PinTheme(
       width: 56,
       height: 56,
-      textStyle: const TextStyle(fontSize: 20, color: Color.fromRGBO(30, 60, 87, 1), fontWeight: FontWeight.w600),
+      textStyle: TextStyle(fontSize: 20, color: isDarkMode ? Colors.white : Colors.black, fontWeight: FontWeight.w600),
       decoration: BoxDecoration(
         border: Border.all(color: AppTheme.primaryColor[100] ?? const Color.fromRGBO(234, 239, 243, 1)),
         borderRadius: BorderRadius.circular(20),
@@ -23,8 +24,9 @@ class OtpScreen extends StatelessWidget {
     );
     final submittedPinTheme = defaultPinTheme.copyWith(
       decoration: defaultPinTheme.decoration?.copyWith(
-        color: AppTheme.secondaryColor[50] ?? const Color.fromRGBO(234, 239, 243, 1),
+        color: isDarkMode ? AppTheme.primaryColor[500] : AppTheme.secondaryColor[50] ?? const Color.fromRGBO(234, 239, 243, 1),
       ),
+      textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w800)
     );
 
     return Scaffold(
