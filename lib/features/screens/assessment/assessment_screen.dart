@@ -2,6 +2,7 @@ import 'package:basics/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:basics/constants/text.dart';
+import 'package:get/get.dart';
 
 class AssessmentScreen extends StatelessWidget {
   const AssessmentScreen({super.key});
@@ -9,6 +10,10 @@ class AssessmentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          title: const Text("Assessment", style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600)),
+          backgroundColor: Colors.transparent,
+        ),
         body: SafeArea(
           child: SingleChildScrollView(
             child: Container(
@@ -18,15 +23,6 @@ class AssessmentScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Center(
-                    child: Text(
-                      "Assessment",
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
                   const SizedBox(height: 150),
                   Center(
                     child: Column(
@@ -55,7 +51,9 @@ class AssessmentScreen extends StatelessWidget {
                         Text(assessmentText, style: Theme.of(context).textTheme.titleMedium, textAlign: TextAlign.center),
                         const SizedBox(height: 30),
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.toNamed('/questions');
+                          },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: AppTheme.primaryColor[500],
                               foregroundColor: Colors.white

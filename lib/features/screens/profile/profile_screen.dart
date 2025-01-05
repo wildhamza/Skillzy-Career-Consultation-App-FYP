@@ -10,6 +10,10 @@ class ProfileScreen extends StatelessWidget {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Profile", style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600)),
+        backgroundColor: Colors.transparent,
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
@@ -19,15 +23,6 @@ class ProfileScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Center(
-                  child: Text(
-                    "Profile",
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
                 const SizedBox(height: 32),
                 Row(
                   children: [
@@ -94,6 +89,7 @@ class ProfileScreen extends StatelessWidget {
                 const SizedBox(height: 40),
                 SettingMenuButton(title: "Edit Profile", has_top_border: true, onTap: () {}),
                 SettingMenuButton(title: "Change Password", onTap: () {}),
+                const Spacer(),
                 SettingMenuButton(title: "Sign out", color: Colors.red, onTap: () {})
               ],
             ),
