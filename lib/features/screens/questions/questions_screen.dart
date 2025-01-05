@@ -1,5 +1,6 @@
 import 'package:basics/utils/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class QuestionsScreen extends StatefulWidget {
   const QuestionsScreen({super.key});
@@ -37,6 +38,8 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
         currentQuestionIndex++;
         selectedOption = null;
       });
+    } else {
+      Get.offNamed('/result');
     }
   }
 
@@ -115,7 +118,9 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                   ElevatedButton(
                     onPressed: nextQuestion,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.secondaryColor[800],
+                      backgroundColor: selectedOption != null
+                          ? AppTheme.secondaryColor[800]
+                          : AppTheme.blackPalette[200],
                     ),
                     child: Text(
                       currentQuestionIndex < questions.length - 1 ? "Next" : "Submit",

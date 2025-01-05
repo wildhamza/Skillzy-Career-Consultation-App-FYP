@@ -6,6 +6,7 @@ import 'package:basics/features/screens/register/register_screen.dart';
 import 'package:basics/features/screens/onboarding/onboarding_screen.dart';
 import 'package:basics/features/screens/login/login_screen.dart';
 import 'package:basics/features/screens/reset_password/reset_password_screen.dart';
+import 'package:basics/features/screens/result/result_screen.dart';
 import 'package:get/get.dart';
 
 class AppRouter {
@@ -41,6 +42,10 @@ class AppRouter {
     GetPage(
       name: '/questions',
       page: () => const QuestionsScreen(),
+    ),
+    GetPage(
+      name: '/result',
+      page: () => const ResultScreen(),
     ),
   ];
 }

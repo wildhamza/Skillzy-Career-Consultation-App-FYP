@@ -19,7 +19,7 @@ class AssessmentScreen extends StatelessWidget {
             child: Container(
               width: double.infinity,
               height: MediaQuery.of(context).size.height,
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
