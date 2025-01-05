@@ -48,10 +48,10 @@ class ProfileScreen extends StatelessWidget {
                               Container(
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                    color: AppTheme.primaryColor, // Border color
-                                    width: 3.0, // Border width
+                                    color: AppTheme.primaryColor,
+                                    width: 3.0,
                                   ),
-                                  borderRadius: BorderRadius.circular(100.0), // Make borders rounded
+                                  borderRadius: BorderRadius.circular(100.0),
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.all(16.0),
