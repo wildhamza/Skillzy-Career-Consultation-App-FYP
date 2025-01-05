@@ -92,7 +92,7 @@ class ProfileScreen extends StatelessWidget {
                 const SizedBox(height: 5),
                 Text("Arooba", style: Theme.of(context).textTheme.displayMedium?.copyWith(fontWeight: FontWeight.w700, color: AppTheme.secondaryColor[700])),
                 const SizedBox(height: 40),
-                SettingMenuButton(title: "Edit Profile", onTap: () {}),
+                SettingMenuButton(title: "Edit Profile", has_top_border: true, onTap: () {}),
                 SettingMenuButton(title: "Change Password", onTap: () {}),
                 SettingMenuButton(title: "Sign out", color: Colors.red, onTap: () {})
               ],

@@ -1,10 +1,9 @@
-import 'package:basics/features/screens/chat/assessment_screen.dart';
+import 'package:basics/features/screens/assessment/assessment_screen.dart';
 import 'package:basics/features/screens/dashboard/dashboard_screen.dart';
 import 'package:basics/features/screens/profile/profile_screen.dart';
 import 'package:basics/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
