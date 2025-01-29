@@ -87,30 +87,6 @@ class AssessmentCard extends StatelessWidget {
                 color: textColorLighter,
               ),
             ),
-            const SizedBox(height: 20),
-
-            // View Details Button
-            ElevatedButton(
-              onPressed: () {
-                // Navigate or show full details
-              },
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                backgroundColor: Colors.black,
-                padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 14),
-                elevation: 5,
-              ),
-              child: const Text(
-                'View Details',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
           ],
         ),
       ),

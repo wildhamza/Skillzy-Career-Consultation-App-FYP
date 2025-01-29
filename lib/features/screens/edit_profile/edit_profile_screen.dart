@@ -1,10 +1,9 @@
-import 'package:basics/components/setting_menu_button.dart';
 import 'package:basics/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class EditProfile extends StatelessWidget {
-  const EditProfile({super.key});
+class EditProfileScreen extends StatelessWidget {
+  const EditProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +41,7 @@ class EditProfile extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          Get.offNamed('/home');
+                          Get.back();
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppTheme.primaryColor[500],

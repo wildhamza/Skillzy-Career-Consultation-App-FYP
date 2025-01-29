@@ -1,3 +1,5 @@
+import 'package:basics/features/screens/change_password/change_password_screen.dart';
+import 'package:basics/features/screens/edit_profile/edit_profile_screen.dart';
 import 'package:basics/features/screens/forgot_password/forgot_password_screen.dart';
 import 'package:basics/features/screens/home/home_screen.dart';
 import 'package:basics/features/screens/otp/otp_screen.dart';
@@ -46,6 +48,14 @@ class AppRouter {
     GetPage(
       name: '/result',
       page: () => const ResultScreen(),
+    ),
+    GetPage(
+      name: '/edit_profile',
+      page: () => const EditProfileScreen(),
+    ),
+    GetPage(
+      name: '/change_password',
+      page: () => const ChangePasswordScreen(),
     ),
   ];
 }

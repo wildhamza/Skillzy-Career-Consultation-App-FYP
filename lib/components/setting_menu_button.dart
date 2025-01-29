@@ -23,7 +23,9 @@ class SettingMenuButton extends StatelessWidget {
     Color borderColor = isDarkMode ? AppTheme.blackPalette[600] ?? Colors.white : AppTheme.whitePalette[600] ?? Colors.black;
 
     return GestureDetector(
-      onTap: onTap(),
+      onTap: () {
+        onTap();
+      },
       child: Container(
         decoration: BoxDecoration(
           border: Border(

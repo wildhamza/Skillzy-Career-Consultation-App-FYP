@@ -1,6 +1,7 @@
 import 'package:basics/components/setting_menu_button.dart';
 import 'package:basics/utils/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -49,11 +50,10 @@ class ProfileScreen extends StatelessWidget {
                                 padding: const EdgeInsets.all(16.0),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(50.0), // Round the image
-                                  child: const Image(
-                                    image: AssetImage('assets/img/profile.png'),
-                                    width: 100.0, // Set image width
-                                    height: 100.0, // Set image height
-                                    fit: BoxFit.cover, // Adjust image scaling
+                                  child: const Icon(
+                                    Icons.person, // User icon from Material
+                                    size: 100.0,  // Adjust size to match the previous image dimensions
+                                    color: Colors.grey, // Change color as needed
                                   ),
                                 ),
                               ),
@@ -80,14 +80,20 @@ class ProfileScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 20),
-              Text("Syeda", style: Theme.of(context).textTheme.displayMedium?.copyWith(fontWeight: FontWeight.w700)),
+              Text("Ghayas", style: Theme.of(context).textTheme.displayMedium?.copyWith(fontWeight: FontWeight.w700)),
               const SizedBox(height: 5),
-              Text("Arooba", style: Theme.of(context).textTheme.displayMedium?.copyWith(fontWeight: FontWeight.w700, color: AppTheme.secondaryColor[700])),
+              Text("Ud Din", style: Theme.of(context).textTheme.displayMedium?.copyWith(fontWeight: FontWeight.w700, color: AppTheme.secondaryColor[700])),
               const SizedBox(height: 40),
-              SettingMenuButton(title: "Edit Profile", has_top_border: true, onTap: () {}),
-              SettingMenuButton(title: "Change Password", onTap: () {}),
+              SettingMenuButton(title: "Edit Profile", has_top_border: true, onTap: () {
+                Get.toNamed('/edit_profile');
+              }),
+              SettingMenuButton(title: "Change Password", onTap: () {
+                Get.toNamed('/change_password');
+              }),
               const Spacer(),
-              SettingMenuButton(title: "Sign out", has_top_border: true, color: Colors.red, onTap: () {})
+              SettingMenuButton(title: "Sign out", has_top_border: true, color: Colors.red, onTap: () {
+                Get.offNamed('/login');
+              })
             ],
           ),
         ),

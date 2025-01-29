@@ -73,13 +73,13 @@ class DashboardScreen extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(height: 40),
+                const SizedBox(height: 60),
 
                 const Text("Tip of the day", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700,)),
                 const SizedBox(height: 15),
                 Container(
                   decoration: BoxDecoration(
-                      color: AppTheme.secondaryColor[900],
+                      color: AppTheme.primaryColor[800],
                       borderRadius: BorderRadius.circular(10)
                   ),
                   child: Padding(
@@ -103,7 +103,7 @@ class DashboardScreen extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(height: 40),
+                const SizedBox(height: 60),
 
                 const Text("Your Assessments Journey", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700,)),
                 const SizedBox(height: 15),
