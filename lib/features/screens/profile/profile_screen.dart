@@ -2,6 +2,7 @@ import 'package:basics/components/setting_menu_button.dart';
 import 'package:basics/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:basics/services/auth_service.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -91,9 +92,16 @@ class ProfileScreen extends StatelessWidget {
                 Get.toNamed('/change_password');
               }),
               const Spacer(),
-              SettingMenuButton(title: "Sign out", has_top_border: true, color: Colors.red, onTap: () {
-                Get.offNamed('/login');
-              })
+              SettingMenuButton(
+                title: "Sign out",
+                has_top_border: true,
+                color: Colors.red,
+                onTap: () async {
+                  final AuthService authService = AuthService();
+                  await authService.logout();
+                  Get.offAllNamed('/login'); // Remove all previous pages
+                },
+              ),
             ],
           ),
         ),

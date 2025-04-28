@@ -9,10 +9,15 @@ import 'package:basics/features/screens/onboarding/onboarding_screen.dart';
 import 'package:basics/features/screens/login/login_screen.dart';
 import 'package:basics/features/screens/reset_password/reset_password_screen.dart';
 import 'package:basics/features/screens/result/result_screen.dart';
+import 'package:basics/features/screens/splash/splash_screen.dart';
 import 'package:get/get.dart';
 
 class AppRouter {
   static final getPages = [
+    GetPage(
+      name: '/splash',
+      page: () => const SplashScreen(),
+    ),
     GetPage(
       name: '/',
       page: () => const OnBoardingScreen(),
