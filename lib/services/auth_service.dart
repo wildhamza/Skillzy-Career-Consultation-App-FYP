@@ -57,16 +57,13 @@ class AuthService {
       );
 
       if (response.statusCode == 200) {
-        // Logout successful
-        await box.remove('token'); // clear token
-        await box.remove('user');  // optional: clear user data if you stored it
+        await box.remove('token');
+        await box.remove('user');
       } else {
-        // Even if logout fails, clear token locally
         await box.remove('token');
         await box.remove('user');
       }
     } catch (e) {
-      // In case of error (like server down), clear token anyway
       await box.remove('token');
       await box.remove('user');
     }

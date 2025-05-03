@@ -2,13 +2,16 @@ import 'package:basics/components/assessment_card.dart';
 import 'package:basics/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get_storage/get_storage.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    String user = "Ghayas";
+    final box = GetStorage();
+    final userData = box.read('user');
+    String user = userData["firstName"] + " " + userData["lastName"];
     String getGreeting() {
       final hour = DateTime.now().hour;
 

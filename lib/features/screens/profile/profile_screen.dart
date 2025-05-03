@@ -1,8 +1,10 @@
 import 'package:basics/components/setting_menu_button.dart';
+import 'package:basics/utils/date.dart';
 import 'package:basics/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:basics/services/auth_service.dart';
+import 'package:get_storage/get_storage.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -10,6 +12,9 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final box = GetStorage();
+    final userData = box.read('user');
+    String formattedDate = formatDateWithOrdinal(userData["createdAt"]);
 
     return Scaffold(
       appBar: AppBar(
@@ -73,7 +78,7 @@ class ProfileScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text("Joined"),
-                            Text("20th August, 2024", style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold))
+                            Text(formattedDate, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold))
                           ],
                         ),
                       )
@@ -81,9 +86,9 @@ class ProfileScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 20),
-              Text("Ghayas", style: Theme.of(context).textTheme.displayMedium?.copyWith(fontWeight: FontWeight.w700)),
+              Text(userData["firstName"], style: Theme.of(context).textTheme.displayMedium?.copyWith(fontWeight: FontWeight.w700)),
               const SizedBox(height: 5),
-              Text("Ud Din", style: Theme.of(context).textTheme.displayMedium?.copyWith(fontWeight: FontWeight.w700, color: AppTheme.secondaryColor[700])),
+              Text(userData["lastName"], style: Theme.of(context).textTheme.displayMedium?.copyWith(fontWeight: FontWeight.w700, color: AppTheme.secondaryColor[700])),
               const SizedBox(height: 40),
               SettingMenuButton(title: "Edit Profile", has_top_border: true, onTap: () {
                 Get.toNamed('/edit_profile');

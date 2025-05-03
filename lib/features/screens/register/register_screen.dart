@@ -1,3 +1,4 @@
+import 'package:basics/utils/index.dart';
 import 'package:flutter/material.dart';
 import 'package:basics/utils/theme.dart';
 import 'package:get/get.dart';
@@ -18,6 +19,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _passwordConfirmController = TextEditingController();
   final box = GetStorage();
 
   bool _isLoading = false;
@@ -26,6 +28,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
     setState(() {
       _isLoading = true;
     });
+
+    // Password confirmation check
+    if (_passwordController.text.trim() != _passwordConfirmController.text.trim()) {
+      showAppSnackbar('Error', 'Passwords do not match', 'error');
+      setState(() => _isLoading = false);
+      return;
+    }
 
     final String? baseUrl = dotenv.env['BASE_URL'];
     final String url = '$baseUrl/auth/signup';
@@ -41,42 +50,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
           "lastName": _lastNameController.text.trim(),
           "email": _emailController.text.trim(),
           "password": _passwordController.text.trim(),
+          "passwordConfirm": _passwordConfirmController.text.trim(),
         }),
       );
-
       final data = json.decode(response.body);
-
-      if (response.statusCode == 200 && data['status'] == 'success') {
-        final token = data['token'];
-
-        // Save token
+      if (response.statusCode == 201 && data['status'] == 'success') {
+        final responseData = jsonDecode(response.body);
+        showAppSnackbar('Success', data["message"], "success");
+        Get.offNamed('/otp', arguments: {
+          'email': _emailController.text.trim(),
+          'type': 'verify'
+        });
+        final token = responseData['token'];
+        final user = responseData['data']['user'];
         await box.write('token', token);
-
-        // Show success snackbar
-        Get.snackbar(
-          'Success',
-          'Check your email for OTP verification.',
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
-
-        // Navigate to OTP screen
-        Get.offNamed('/otp');
+        await box.write('user', user);
       } else {
-        Get.snackbar(
-          'Error',
-          data['message'] ?? 'Registration failed!',
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
+        showAppSnackbar('Signup Failed', data["message"], "error");
       }
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Something went wrong!',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      showAppSnackbar('Error', 'Something went wrong!', "error");
     } finally {
       setState(() {
         _isLoading = false;
@@ -152,15 +145,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     obscureText: true,
                   ),
                   const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: _isLoading ? null : _register,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.primaryColor[500],
-                      foregroundColor: Colors.white,
+                  TextField(
+                    controller: _passwordConfirmController,
+                    decoration: const InputDecoration(
+                      labelText: 'Confirm Password',
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(Icons.lock_outline),
                     ),
-                    child: _isLoading
-                        ? const CircularProgressIndicator(color: Colors.white)
-                        : Text('Register'.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold)),
+                    obscureText: true,
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                      onPressed: _isLoading ? null : _register,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.primaryColor[500],
+                        foregroundColor: Colors.white,
+                      ),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Text('Register'.toUpperCase(),
+                              style: const TextStyle(fontWeight: FontWeight.bold)),
+                          if (_isLoading)
+                            const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                            )
+                        ],
+                      )
                   ),
                   const SizedBox(height: 5),
                   TextButton(

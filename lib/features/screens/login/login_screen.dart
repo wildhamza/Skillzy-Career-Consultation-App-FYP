@@ -1,3 +1,4 @@
+import 'package:basics/utils/index.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -14,12 +15,16 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
 
-  final box = GetStorage(); // instance of local storage
+  final box = GetStorage();
 
   Future<void> login() async {
+    setState(() {
+      _isLoading = true;
+    });
     final baseUrl = dotenv.env['BASE_URL'];
     final url = Uri.parse('$baseUrl/auth/login');
 
@@ -28,35 +33,34 @@ class _LoginScreenState extends State<LoginScreen> {
         url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          'email': emailController.text.trim(),
-          'password': passwordController.text.trim(),
+          'email': _emailController.text.trim(),
+          'password': _passwordController.text.trim(),
         }),
       );
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
 
-        final token = responseData['token'];
-        final user = responseData['data']['user'];
-
-        // Save token and user in storage
-        await box.write('token', token);
-        await box.write('user', user);
-
-        // Navigate to home
-        Get.offNamed('/home');
+        if (responseData["message"] != null && responseData["message"].toString().isNotEmpty) {
+          showAppSnackbar('OTP Sent', responseData["message"], "success");
+          Get.offNamed('/otp', arguments: {'email': _emailController.text.trim(), 'type': 'verify'});
+        } else {
+          final token = responseData['token'];
+          final user = responseData['data']['user'];
+          await box.write('token', token);
+          await box.write('user', user);
+          Get.offNamed('/home');
+        }
       } else {
         final error = jsonDecode(response.body);
-        Get.snackbar('Login Failed', error['message'] ?? 'Unknown error',
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
+        showAppSnackbar('Login Failed', error['message'] ?? 'Unknown error', "error");
       }
     } catch (e) {
-      Get.snackbar('Error', e.toString(),
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      showAppSnackbar('Error', 'Something went wrong!', "error");
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -92,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 80),
                 TextField(
-                  controller: emailController,
+                  controller: _emailController,
                   decoration: const InputDecoration(
                     labelText: 'Email',
                     border: OutlineInputBorder(),
@@ -102,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 20),
                 TextField(
-                  controller: passwordController,
+                  controller: _passwordController,
                   decoration: const InputDecoration(
                     labelText: 'Password',
                     border: OutlineInputBorder(),
@@ -112,12 +116,23 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: login, // call login function
+                  onPressed: login,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppTheme.primaryColor[500],
                     foregroundColor: Colors.white,
                   ),
-                  child: Text('Login'.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold)),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Text('Login'.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold)),
+                      if (_isLoading)
+                        const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                        )
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 5),
                 Row(
