@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:basics/utils/theme.dart';
+import 'dart:convert';
+import 'package:basics/utils/index.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
 
 class ResultScreen extends StatefulWidget {
   const ResultScreen({super.key});
@@ -11,20 +16,58 @@ class ResultScreen extends StatefulWidget {
 }
 
 class _ResultScreenState extends State<ResultScreen> {
-  // Initializing with null values to show loading indicator first
   List<String> recommendedSkills = [];
-  List<String> recommendedCareers = [];
+  String recommendedCareer = '';
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    // Simulate a 5-second delay to show the generated skills and careers
-    Future.delayed(const Duration(seconds: 5), () {
-      setState(() {
-        recommendedSkills = ['Communication', 'Problem Solving', 'Leadership'];
-        recommendedCareers = ['Marketing Manager', 'Project Manager', 'HR Specialist'];
-      });
+    final args = Get.arguments;
+    final List<String?> options = args['options'];
+    submitAnswers(options);
+  }
+
+  Future<void> submitAnswers(List<String?> options) async {
+    final box = GetStorage();
+    final token = box.read('token');
+    final String? baseUrl = dotenv.env['BASE_URL'];
+    final String url = '$baseUrl/recommendation/recommend-career';
+
+    setState(() {
+      _isLoading = true;
     });
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          "answers": options,
+        }),
+      );
+
+      final data = json.decode(response.body);
+
+      if (response.statusCode == 200 && data["status"] == "success") {
+        final recommendation = data["data"]["recommendation"];
+        setState(() {
+          recommendedSkills = List<String>.from(recommendation["recommendedSkills"]);
+          recommendedCareer = recommendation["recommendedCareer"];
+        });
+      } else {
+        showAppSnackbar('Error', data["message"] ?? "Something went wrong", "error");
+      }
+    } catch (e) {
+      showAppSnackbar('Error', "Failed to submit answers", "error");
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -44,7 +87,7 @@ class _ResultScreenState extends State<ResultScreen> {
             children: [
               const SizedBox(height: 120),
               // Display the loading message or the results based on the state
-              if (recommendedSkills.isEmpty && recommendedCareers.isEmpty)
+              if (_isLoading)
                 Column(
                   children: [
                     Center(
@@ -73,6 +116,17 @@ class _ResultScreenState extends State<ResultScreen> {
                 Column(
                   children: [
                     Text(
+                      "Recommended Career Path",
+                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      recommendedCareer,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 18, height: 1.7),
+                    ),
+                    const SizedBox(height: 60),
+                    Text(
                       "Recommended Skills",
                       style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
@@ -81,18 +135,6 @@ class _ResultScreenState extends State<ResultScreen> {
                     for (var skill in recommendedSkills)
                       Text(
                         skill,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 18, height: 1.7),
-                      ),
-                    const SizedBox(height: 60),
-                    Text(
-                      "Recommended Careers Paths",
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 10),
-                    for (var career in recommendedCareers)
-                      Text(
-                        career,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 18, height: 1.7),
                       ),
                     const SizedBox(height: 30),
