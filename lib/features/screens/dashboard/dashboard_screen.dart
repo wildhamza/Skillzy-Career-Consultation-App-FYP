@@ -1,28 +1,97 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:basics/components/assessment_card.dart';
+import 'package:basics/utils/getQuotes.dart';
 import 'package:basics/utils/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
+
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  List<dynamic> recommendations = [];
+  bool isLoading = true;
+  bool isError = false;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchRecommendations();
+  }
+
+  Future<void> fetchRecommendations() async {
+    final baseUrl = dotenv.env['BASE_URL'];
+    final box = GetStorage();
+    final userData = box.read('user');
+    final token = box.read('token');
+    final userId = userData["_id"];
+
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/recommendation?userId=$userId'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final body = json.decode(response.body);
+        setState(() {
+          recommendations = body["data"]["recommendations"];
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          isError = true;
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        isError = true;
+        isLoading = false;
+      });
+    }
+  }
+
+  String getGreeting() {
+    final hour = DateTime.now().hour;
+    if (hour >= 5 && hour < 12) return "Morning";
+    if (hour >= 12 && hour < 18) return "Afternoon";
+    return "Evening";
+  }
+
+  String formatDate(String isoDate) {
+    final date = DateTime.parse(isoDate);
+    final day = date.day;
+    final suffix = (day >= 11 && day <= 13)
+        ? 'th'
+        : (day % 10 == 1)
+        ? 'st'
+        : (day % 10 == 2)
+        ? 'nd'
+        : (day % 10 == 3)
+        ? 'rd'
+        : 'th';
+    return '${day}$suffix ${DateFormat("MMMM, y").format(date)}';
+  }
 
   @override
   Widget build(BuildContext context) {
     final box = GetStorage();
     final userData = box.read('user');
-    String user = userData["firstName"] + " " + userData["lastName"];
-    String getGreeting() {
-      final hour = DateTime.now().hour;
-
-      if (hour >= 5 && hour < 12) {
-        return "Morning";
-      } else if (hour >= 12 && hour < 18) {
-        return "Afternoon";
-      } else {
-        return "Evening";
-      }
-    }
+    final user = "${userData["firstName"]} ${userData["lastName"]}";
+    final randomQuote = getQuotes()[Random().nextInt(getQuotes().length)];
 
     return Scaffold(
       body: SafeArea(
@@ -30,7 +99,11 @@ class DashboardScreen extends StatelessWidget {
           width: double.infinity,
           height: MediaQuery.of(context).size.height,
           padding: const EdgeInsets.all(20),
-          child: SingleChildScrollView(
+          child: isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : isError
+              ? const Center(child: Text("Failed to load recommendations"))
+              : SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -39,14 +112,12 @@ class DashboardScreen extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: "Good ${getGreeting()} ",
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: const TextStyle(fontWeight: FontWeight.w600),
                       ),
                       TextSpan(
                         text: user,
                         style: TextStyle(
-                          color: AppTheme.secondaryColor[600],
+                          color: AppTheme.primaryColor[300],
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -60,7 +131,7 @@ class DashboardScreen extends StatelessWidget {
                       TextSpan(
                         text: "Welcome ",
                         style: TextStyle(
-                          color: AppTheme.secondaryColor[600],
+                          color: AppTheme.primaryColor[300],
                           fontSize: 20,
                           fontWeight: FontWeight.w700,
                         ),
@@ -75,58 +146,44 @@ class DashboardScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 60),
-
-                const Text("Tip of the day", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700,)),
+                const Text("Tip of the day",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
                 const SizedBox(height: 15),
-                Container(
-                  decoration: BoxDecoration(
-                      color: AppTheme.primaryColor[800],
-                      borderRadius: BorderRadius.circular(10)
-                  ),
-                  child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Stack(
-                        children: [
-                          SvgPicture.asset(
-                            'assets/svg/quote.svg',
-                            height: 30,
-                            width: 30,
-                            fit: BoxFit.contain,
+                IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(width: 3, color: Colors.white),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          randomQuote,
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600,
+                            height: 1.6,
+                            color: AppTheme.secondaryColor[500],
                           ),
-                          Padding(
-                              padding: const EdgeInsets.only(top: 5),
-                              child: Text("         Choose a job you love, and you will never have to work a day in your life.", style: TextStyle(
-                                  height: 2, fontWeight: FontWeight.w600, fontSize: 17, color: AppTheme.whitePalette[500]
-                              )),
-                          )
-                        ],
+                        ),
                       ),
+                    ],
                   ),
                 ),
-
                 const SizedBox(height: 60),
-
-                const Text("Your Assessments Journey", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700,)),
+                const Text("Your Assessments Journey",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
                 const SizedBox(height: 15),
-                const AssessmentCard(
-                  date: 'July 12, 2024',
-                  skills: ['Communication', 'Problem Solving', 'Leadership'],
-                  careers: ['Marketing Manager', 'Project Manager', 'HR Specialist'],
-                ),
-                const SizedBox(height: 15),
-                const AssessmentCard(
-                  date: 'August 5, 2024',
-                  skills: ['Critical Thinking', 'Creativity', 'Teamwork'],
-                  careers: ['Graphic Designer', 'Data Analyst', 'Content Writer'],
-                ),
-                const SizedBox(height: 15),
-                const AssessmentCard(
-                  date: 'September 10, 2024',
-                  skills: ['Technical Knowledge', 'Attention to Detail', 'Adaptability'],
-                  careers: ['Software Engineer', 'Quality Assurance Specialist', 'IT Support Specialist'],
-                )
+                ...recommendations.map((rec) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 15),
+                    child: AssessmentCard(
+                      date: formatDate(rec["createdAt"]),
+                      skills: List<String>.from(rec["recommendedSkills"]),
+                      careers: [rec["recommendedCareer"]],
+                    ),
+                  );
+                }).toList(),
               ],
             ),
           ),

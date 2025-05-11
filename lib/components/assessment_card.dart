@@ -24,7 +24,7 @@ class AssessmentCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       elevation: 10,
       shadowColor: Colors.black.withOpacity(0.5),
-      color: isDarkMode ? AppTheme.primaryColor[500] : AppTheme.primaryColor[100],
+      color: isDarkMode ? AppTheme.primaryColor[900] : AppTheme.primaryColor[100],
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -53,24 +53,6 @@ class AssessmentCard extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
-            // Skills Section
-            const Text(
-              'Skills Identified:',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              skills.map((skill) => '• $skill').join('\n'), // Dynamically display skills
-              style: TextStyle(
-                fontSize: 14,
-                color: textColorLighter,
-              ),
-            ),
-            const SizedBox(height: 16),
-
             // Suggested Careers Section
             const Text(
               'Suggested Careers:',
@@ -82,6 +64,25 @@ class AssessmentCard extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               careers.map((career) => '• $career').join('\n'), // Dynamically display careers
+              style: TextStyle(
+                fontSize: 14,
+                color: textColorLighter,
+              ),
+            ),
+
+            const SizedBox(height: 16),
+
+            // Skills Section
+            const Text(
+              'Skills Identified:',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              skills.map((skill) => '• $skill').join('\n'), // Dynamically display skills
               style: TextStyle(
                 fontSize: 14,
                 color: textColorLighter,
