@@ -1,9 +1,9 @@
+import 'package:basics/constants/api_constants.dart';
 import 'package:basics/utils/index.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:basics/utils/theme.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:convert';
 
 class ResetPasswordScreen extends StatefulWidget {
@@ -16,7 +16,7 @@ class ResetPasswordScreen extends StatefulWidget {
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  final String? baseUrl = dotenv.env['BASE_URL'];
+  final String? baseUrl = ApiConstants.baseUrl;
   bool _isLoading = false;
 
   late final String otp;
@@ -58,7 +58,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
       if (response.statusCode == 200 && res['status'] == 'success') {
         Get.offAllNamed('/login');
-        showAppSnackbar('Success', res['message'] ?? 'Password updated', "success");
+        showAppSnackbar(
+            'Success', res['message'] ?? 'Password updated', "success");
       } else {
         showAppSnackbar('Error', res['message'] ?? 'Reset failed', "error");
       }
@@ -89,9 +90,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         child: Column(
           children: [
             const SizedBox(height: 40),
-            Center(child: Image.asset('assets/img/logo.png', width: 100, height: 100)),
+            Center(
+                child: Image.asset('assets/img/logo.png',
+                    width: 100, height: 100)),
             const SizedBox(height: 10),
-            const Text("Change your Password", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            const Text("Change your Password",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
             const SizedBox(height: 80),
             TextField(
               controller: _passwordController,
@@ -114,24 +118,25 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _isLoading ? null : resetPassword,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primaryColor[500],
-                foregroundColor: Colors.white,
-              ),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Text('Update Password'.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold)),
-                  if (_isLoading)
-                    const SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
-                    )
-                ],
-              )
-            ),
+                onPressed: _isLoading ? null : resetPassword,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.primaryColor[500],
+                  foregroundColor: Colors.white,
+                ),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Text('Update Password'.toUpperCase(),
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                    if (_isLoading)
+                      const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                            color: Colors.white, strokeWidth: 2),
+                      )
+                  ],
+                )),
           ],
         ),
       ),

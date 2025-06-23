@@ -1,10 +1,10 @@
+import 'package:basics/constants/api_constants.dart';
 import 'package:basics/utils/index.dart';
 import 'package:flutter/material.dart';
 import 'package:basics/utils/theme.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:convert';
 
 class OtpScreen extends StatefulWidget {
@@ -15,7 +15,7 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
-  final String? baseUrl = dotenv.env['BASE_URL'];
+  final String? baseUrl = ApiConstants.baseUrl;
   String otp = '';
   bool _isLoading = false;
 
@@ -66,7 +66,8 @@ class _OtpScreenState extends State<OtpScreen> {
 
         showAppSnackbar('Success', res['message'] ?? 'OTP Verified', "success");
       } else {
-        showAppSnackbar('Error', res['message'] ?? 'Verification failed', "error");
+        showAppSnackbar(
+            'Error', res['message'] ?? 'Verification failed', "error");
       }
     } catch (e) {
       showAppSnackbar('Error', 'Something went wrong', "error");
@@ -100,7 +101,8 @@ class _OtpScreenState extends State<OtpScreen> {
             children: [
               const SizedBox(height: 40),
               Center(
-                child: Image.asset('assets/img/logo.png', width: 100, height: 100),
+                child:
+                    Image.asset('assets/img/logo.png', width: 100, height: 100),
               ),
               const SizedBox(height: 10),
               const Text(
@@ -115,24 +117,25 @@ class _OtpScreenState extends State<OtpScreen> {
               ),
               const SizedBox(height: 40),
               ElevatedButton(
-                onPressed: _isLoading ? null : verifyOtp,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.primaryColor[500],
-                  foregroundColor: Colors.white,
-                ),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Text('Update Password'.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold)),
-                    if (_isLoading)
-                      const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
-                      )
-                  ],
-                )
-              ),
+                  onPressed: _isLoading ? null : verifyOtp,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppTheme.primaryColor[500],
+                    foregroundColor: Colors.white,
+                  ),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Text('Update Password'.toUpperCase(),
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
+                      if (_isLoading)
+                        const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                              color: Colors.white, strokeWidth: 2),
+                        )
+                    ],
+                  )),
             ],
           ),
         ),

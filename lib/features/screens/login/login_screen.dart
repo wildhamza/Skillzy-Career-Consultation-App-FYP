@@ -1,9 +1,9 @@
+import 'package:basics/constants/api_constants.dart';
 import 'package:basics/utils/index.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:basics/utils/theme.dart';
 
@@ -25,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       _isLoading = true;
     });
-    final baseUrl = dotenv.env['BASE_URL'];
+    final baseUrl = ApiConstants.baseUrl;
     final url = Uri.parse('$baseUrl/auth/login');
 
     try {
@@ -41,9 +41,13 @@ class _LoginScreenState extends State<LoginScreen> {
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
 
-        if (responseData["message"] != null && responseData["message"].toString().isNotEmpty) {
+        if (responseData["message"] != null &&
+            responseData["message"].toString().isNotEmpty) {
           showAppSnackbar('OTP Sent', responseData["message"], "success");
-          Get.offNamed('/otp', arguments: {'email': _emailController.text.trim(), 'type': 'verify'});
+          Get.offNamed('/otp', arguments: {
+            'email': _emailController.text.trim(),
+            'type': 'verify'
+          });
         } else {
           final token = responseData['token'];
           final user = responseData['data']['user'];
@@ -53,7 +57,8 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       } else {
         final error = jsonDecode(response.body);
-        showAppSnackbar('Login Failed', error['message'] ?? 'Unknown error', "error");
+        showAppSnackbar(
+            'Login Failed', error['message'] ?? 'Unknown error', "error");
       }
     } catch (e) {
       showAppSnackbar('Error', 'Something went wrong!', "error");
@@ -124,12 +129,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      Text('Login'.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold)),
+                      Text('Login'.toUpperCase(),
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
                       if (_isLoading)
                         const SizedBox(
                           width: 20,
                           height: 20,
-                          child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                          child: CircularProgressIndicator(
+                              color: Colors.white, strokeWidth: 2),
                         )
                     ],
                   ),

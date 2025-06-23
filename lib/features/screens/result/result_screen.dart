@@ -1,3 +1,4 @@
+import 'package:basics/constants/api_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -5,7 +6,6 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:basics/utils/theme.dart';
 import 'dart:convert';
 import 'package:basics/utils/index.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class ResultScreen extends StatefulWidget {
@@ -31,7 +31,7 @@ class _ResultScreenState extends State<ResultScreen> {
   Future<void> submitAnswers(List<String?> options) async {
     final box = GetStorage();
     final token = box.read('token');
-    final String? baseUrl = dotenv.env['BASE_URL'];
+    final String? baseUrl = ApiConstants.baseUrl;
     final String url = '$baseUrl/recommendation/recommend-career';
 
     setState(() {
@@ -55,11 +55,14 @@ class _ResultScreenState extends State<ResultScreen> {
       if (response.statusCode == 200 && data["status"] == "success") {
         final recommendation = data["data"]["recommendation"];
         setState(() {
-          recommendedSkills = List<String>.from(recommendation["recommendedSkills"]);
+          recommendedSkills =
+              List<String>.from(recommendation["recommendedSkills"]);
           recommendedCareer = recommendation["recommendedCareer"];
         });
       } else {
-        showAppSnackbar('Error', data["message"] ?? "Something went wrong", "error");
+        print(data);
+        showAppSnackbar(
+            'Error', data["message"] ?? "Something went wrong", "error");
       }
     } catch (e) {
       showAppSnackbar('Error', "Failed to submit answers", "error");
@@ -100,14 +103,18 @@ class _ResultScreenState extends State<ResultScreen> {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(20),
-                          child: LoadingAnimationWidget.waveDots(color: Colors.white, size: 120),
+                          child: LoadingAnimationWidget.waveDots(
+                              color: Colors.white, size: 120),
                         ),
                       ),
                     ),
                     const SizedBox(height: 50),
                     Text(
                       "Generating skills and \n career for you",
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(height: 1.5, fontWeight: FontWeight.bold),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(height: 1.5, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     )
                   ],
@@ -117,25 +124,37 @@ class _ResultScreenState extends State<ResultScreen> {
                   children: [
                     Text(
                       "Recommended Career Path",
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineMedium
+                          ?.copyWith(fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 10),
                     Text(
                       recommendedCareer,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 18, height: 1.7),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontSize: 18, height: 1.7),
                     ),
                     const SizedBox(height: 60),
                     Text(
                       "Recommended Skills",
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineMedium
+                          ?.copyWith(fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 10),
                     for (var skill in recommendedSkills)
                       Text(
                         skill,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 18, height: 1.7),
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(fontSize: 18, height: 1.7),
                       ),
                     const SizedBox(height: 30),
                     ElevatedButton(
@@ -144,9 +163,9 @@ class _ResultScreenState extends State<ResultScreen> {
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: AppTheme.primaryColor[500],
-                          foregroundColor: Colors.white
-                      ),
-                      child: Text('Continue'.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold)),
+                          foregroundColor: Colors.white),
+                      child: Text('Continue'.toUpperCase(),
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
                     )
                   ],
                 ),

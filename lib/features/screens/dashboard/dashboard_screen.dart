@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:basics/components/assessment_card.dart';
+import 'package:basics/constants/api_constants.dart';
 import 'package:basics/utils/getQuotes.dart';
 import 'package:basics/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
@@ -29,7 +29,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future<void> fetchRecommendations() async {
-    final baseUrl = dotenv.env['BASE_URL'];
+    final baseUrl = ApiConstants.baseUrl;
     final box = GetStorage();
     final userData = box.read('user');
     final token = box.read('token');
@@ -77,12 +77,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final suffix = (day >= 11 && day <= 13)
         ? 'th'
         : (day % 10 == 1)
-        ? 'st'
-        : (day % 10 == 2)
-        ? 'nd'
-        : (day % 10 == 3)
-        ? 'rd'
-        : 'th';
+            ? 'st'
+            : (day % 10 == 2)
+                ? 'nd'
+                : (day % 10 == 3)
+                    ? 'rd'
+                    : 'th';
     return '${day}$suffix ${DateFormat("MMMM, y").format(date)}';
   }
 
@@ -102,91 +102,95 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: isLoading
               ? const Center(child: CircularProgressIndicator())
               : isError
-              ? const Center(child: Text("Failed to load recommendations"))
-              : SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text: "Good ${getGreeting()} ",
-                        style: const TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                      TextSpan(
-                        text: user,
-                        style: TextStyle(
-                          color: AppTheme.primaryColor[300],
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 5),
-                Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text: "Welcome ",
-                        style: TextStyle(
-                          color: AppTheme.primaryColor[300],
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      const TextSpan(
-                        text: "back",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 60),
-                const Text("Tip of the day",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
-                const SizedBox(height: 15),
-                IntrinsicHeight(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(width: 3, color: Colors.white),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Text(
-                          randomQuote,
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w600,
-                            height: 1.6,
-                            color: AppTheme.secondaryColor[500],
+                  ? const Center(child: Text("Failed to load recommendations"))
+                  : SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: "Good ${getGreeting()} ",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                TextSpan(
+                                  text: user,
+                                  style: TextStyle(
+                                    color: AppTheme.primaryColor[300],
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
+                          const SizedBox(height: 5),
+                          Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: "Welcome ",
+                                  style: TextStyle(
+                                    color: AppTheme.primaryColor[300],
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                const TextSpan(
+                                  text: "back",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 60),
+                          const Text("Tip of the day",
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w700)),
+                          const SizedBox(height: 15),
+                          IntrinsicHeight(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(width: 3, color: Colors.white),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Text(
+                                    randomQuote,
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w600,
+                                      height: 1.6,
+                                      color: AppTheme.secondaryColor[500],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 60),
+                          const Text("Your Assessments Journey",
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w700)),
+                          const SizedBox(height: 15),
+                          ...recommendations.map((rec) {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 15),
+                              child: AssessmentCard(
+                                date: formatDate(rec["createdAt"]),
+                                skills:
+                                    List<String>.from(rec["recommendedSkills"]),
+                                careers: [rec["recommendedCareer"]],
+                              ),
+                            );
+                          }).toList(),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 60),
-                const Text("Your Assessments Journey",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
-                const SizedBox(height: 15),
-                ...recommendations.map((rec) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 15),
-                    child: AssessmentCard(
-                      date: formatDate(rec["createdAt"]),
-                      skills: List<String>.from(rec["recommendedSkills"]),
-                      careers: [rec["recommendedCareer"]],
                     ),
-                  );
-                }).toList(),
-              ],
-            ),
-          ),
         ),
       ),
     );

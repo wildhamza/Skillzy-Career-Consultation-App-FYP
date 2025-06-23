@@ -1,10 +1,10 @@
+import 'package:basics/constants/api_constants.dart';
 import 'package:basics/utils/index.dart';
 import 'package:flutter/material.dart';
 import 'package:basics/utils/theme.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_storage/get_storage.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -23,7 +23,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   Future<void> _sendResetEmail() async {
     setState(() => _isLoading = true);
 
-    final String? baseUrl = dotenv.env['BASE_URL'];
+    final String? baseUrl = ApiConstants.baseUrl;
     final String url = '$baseUrl/auth/forgot-password';
 
     try {
@@ -41,11 +41,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
       if (response.statusCode == 200 && data['status'] == 'success') {
         await box.write('email', _emailController.text.trim());
-        showAppSnackbar('OTP Sent', data['message'] ?? 'Email sent!', "success");
-        Get.toNamed('/otp', arguments: {'email': _emailController.text.trim(), 'type': 'forgot'});
+        showAppSnackbar(
+            'OTP Sent', data['message'] ?? 'Email sent!', "success");
+        Get.toNamed('/otp', arguments: {
+          'email': _emailController.text.trim(),
+          'type': 'forgot'
+        });
       } else {
         final error = jsonDecode(response.body);
-        showAppSnackbar('Login Failed', error['message'] ?? 'Unknown error', "error");
+        showAppSnackbar(
+            'Login Failed', error['message'] ?? 'Unknown error', "error");
       }
     } catch (e) {
       showAppSnackbar('Error', 'Something went wrong!', "error");
@@ -98,17 +103,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     onPressed: _isLoading ? null : _sendResetEmail,
                     style: ElevatedButton.styleFrom(
                         backgroundColor: AppTheme.primaryColor[500],
-                        foregroundColor: Colors.white
-                    ),
+                        foregroundColor: Colors.white),
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        Text('Send Email'.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold)),
+                        Text('Send Email'.toUpperCase(),
+                            style:
+                                const TextStyle(fontWeight: FontWeight.bold)),
                         if (_isLoading)
                           const SizedBox(
                             width: 20,
                             height: 20,
-                            child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                            child: CircularProgressIndicator(
+                                color: Colors.white, strokeWidth: 2),
                           )
                       ],
                     ),
@@ -129,7 +136,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               ),
             ),
           ),
-        )
-    );
+        ));
   }
 }

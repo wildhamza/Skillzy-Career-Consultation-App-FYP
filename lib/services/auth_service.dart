@@ -1,4 +1,4 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:basics/constants/api_constants.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -12,7 +12,7 @@ class AuthService {
       return false;
     }
 
-    final baseUrl = dotenv.env['BASE_URL'];
+    final baseUrl = ApiConstants.baseUrl;
     final url = Uri.parse('$baseUrl/auth/logged-in');
 
     try {
@@ -44,7 +44,7 @@ class AuthService {
       return;
     }
 
-    final baseUrl = dotenv.env['BASE_URL'];
+    final baseUrl = ApiConstants.baseUrl;
     final url = Uri.parse('$baseUrl/auth/logout');
 
     try {

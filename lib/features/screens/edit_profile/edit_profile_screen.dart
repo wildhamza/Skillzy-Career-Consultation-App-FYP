@@ -1,12 +1,12 @@
 import 'dart:convert';
 
+import 'package:basics/constants/api_constants.dart';
 import 'package:basics/utils/index.dart';
 import 'package:basics/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -43,7 +43,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       isLoading = true;
     });
 
-    final baseUrl = dotenv.env['BASE_URL'];
+    final baseUrl = ApiConstants.baseUrl;
     final token = box.read("token");
 
     try {
@@ -67,7 +67,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         box.write('user', updatedUser);
         Get.back(result: updatedUser);
       } else {
-        showAppSnackbar('Error', data["message"] ?? 'Something went wrong!', "error");
+        showAppSnackbar(
+            'Error', data["message"] ?? 'Something went wrong!', "error");
       }
     } catch (e) {
       showAppSnackbar('Error', "Failed to update profile", "error");
@@ -89,7 +90,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Edit Profile", style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600)),
+        title: const Text("Edit Profile",
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600)),
         backgroundColor: Colors.transparent,
       ),
       body: SafeArea(
@@ -129,12 +131,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
-                          Text('Update Profile'.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold)),
+                          Text('Update Profile'.toUpperCase(),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold)),
                           if (isLoading)
                             const SizedBox(
                               width: 20,
                               height: 20,
-                              child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                              child: CircularProgressIndicator(
+                                  color: Colors.white, strokeWidth: 2),
                             )
                         ],
                       ),

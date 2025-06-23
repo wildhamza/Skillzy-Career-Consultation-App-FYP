@@ -1,12 +1,12 @@
 import 'dart:convert';
 
+import 'package:basics/constants/api_constants.dart';
 import 'package:basics/utils/index.dart';
 import 'package:basics/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({super.key});
@@ -27,13 +27,16 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     final newPassword = _newPasswordController.text.trim();
     final confirmPassword = _confirmPasswordController.text.trim();
 
-    if (currentPassword.isEmpty || newPassword.isEmpty || confirmPassword.isEmpty) {
+    if (currentPassword.isEmpty ||
+        newPassword.isEmpty ||
+        confirmPassword.isEmpty) {
       Get.snackbar("Error", "Please fill all fields");
       return;
     }
 
     if (newPassword != confirmPassword) {
-      showAppSnackbar('Validation Error', "New passwords do not match", "error");
+      showAppSnackbar(
+          'Validation Error', "New passwords do not match", "error");
       return;
     }
 
@@ -41,7 +44,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       isLoading = true;
     });
 
-    final baseUrl = dotenv.env['BASE_URL'];
+    final baseUrl = ApiConstants.baseUrl;
     final box = GetStorage();
     final token = box.read("token");
 
@@ -65,7 +68,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         // showAppSnackbar('Success', data["message"] ?? "Password updated", "success");
         Get.back();
       } else {
-        showAppSnackbar('Error', data["message"] ?? 'Something went wrong!', "error");
+        showAppSnackbar(
+            'Error', data["message"] ?? 'Something went wrong!', "error");
       }
     } catch (e) {
       showAppSnackbar('Error', "Failed to update password", "error");
@@ -88,7 +92,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Change Password", style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600)),
+        title: const Text("Change Password",
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600)),
         backgroundColor: Colors.transparent,
       ),
       body: SafeArea(
@@ -140,12 +145,15 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
-                          Text('Update Password'.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold)),
+                          Text('Update Password'.toUpperCase(),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold)),
                           if (isLoading)
                             const SizedBox(
                               width: 20,
                               height: 20,
-                              child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                              child: CircularProgressIndicator(
+                                  color: Colors.white, strokeWidth: 2),
                             )
                         ],
                       ),
