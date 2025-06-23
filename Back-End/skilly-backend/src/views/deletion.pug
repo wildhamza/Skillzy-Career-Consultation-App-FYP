@@ -1,0 +1,15 @@
+extends base
+
+block append head
+  link(rel="stylesheet", href="/css/deletion.css")
+
+block append script
+  script(src="/js/deletion.js")
+
+block content
+  div#container
+    form#login
+      h1 #{title}
+      input(type="email" name="email" placeholder="Enter your registered email")
+      input(type="otp" name="otp" placeholder="Enter Otp")
+      button(type="submit") Delete

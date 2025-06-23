@@ -1,0 +1,12 @@
+node_modules
+
+.vscode
+.vercel
+.env
+
+dist
+
+build
+
+src/script/venv
+src/script/__pycache__

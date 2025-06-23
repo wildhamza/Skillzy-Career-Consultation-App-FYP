@@ -1,0 +1,15 @@
+extends base
+
+block append head
+  link(rel="stylesheet", href="/css/login.css")
+
+block append script
+  script(src="/js/login.js")
+
+block content
+  div#container
+    form#login
+      h1 #{title}
+      input(type="email" name="email" placeholder="Enter your registered email with GoFitWithUs")
+      //- input(type="password" name="password" placeholder="Password")
+      button(type="submit") Send OTP

@@ -1,0 +1,62 @@
+/* Style for input fields */
+input[type="email"],
+input[type="otp"] {
+  text-align: center;
+  /* Add your desired styles */
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Style for the delete button */
+button[type="submit"] {
+  /* Add your desired styles */
+  padding: 10px 20px;
+  background-color: #ED1C24; /* Example color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Style for button on hover */
+button[type="submit"]:hover {
+  background-color: #ED1C24; /* Example color */
+}
+
+/* Container for the form and title */
+#container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center vertically */
+  height: 100vh; /* Set height to full viewport height */
+}
+
+/* Form styling */
+form#login {
+  display: flex;
+  flex-direction: column; /* Set flex direction to column */
+  row-gap: 12px;
+  align-items: center; /* Center items horizontally */
+  /* border: 2px solid gray; */
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 520px;
+  margin-top: 150px;
+  width: 100%;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;;
+
+}
+
+input[type="email"],
+input[type="otp"] {
+  /* Add your desired styles */
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%; /* Set width to fill the container */
+  max-width: 300px; /* Set max-width to prevent stretching */
+  text-align: left;
+}

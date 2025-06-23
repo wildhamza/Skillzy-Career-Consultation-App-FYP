@@ -1,0 +1,23 @@
+doctype html
+html
+  head
+    block head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="Content-Security-Policy" content="form-action 'self' https://44.199.34.139:8080")
+
+
+    link(rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap")
+    link(rel="stylesheet", href="css/style.css")
+
+    title Gym App | #{title}
+
+  body
+    // CONTENT
+    block content
+      h1 This is a placeholder heading
+
+    block footer
+
+    script(src="/js/axios.js")
+    block script
